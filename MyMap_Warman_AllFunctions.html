@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MyMap - LWarman March 2020 </title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+/* set the map height */
+      #map {
+        height: 100%;
+      }
+	  	  
+/* make the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var map, infoWindow;
+	  
+//styles and behaviours (CSS and Javascript)	  
+	    function CircleControl(controlDiv, map) {
+			
+        var radButton1 = document.createElement('div');
+		var radButton2 = document.createElement('div');
+		var radButton3 = document.createElement('div');
+		
+        controlDiv.appendChild(radButton1);
+		controlDiv.appendChild(radButton2);
+		controlDiv.appendChild(radButton3);
+		
+        radButton1.style.backgroundColor = '#e3e3e3';
+        radButton1.style.border = '2px solid #e3e3e3';
+        radButton1.style.borderRadius = '3px';
+        radButton1.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        radButton1.style.cursor = 'pointer';
+        radButton1.style.marginBottom = '2px';
+		radButton1.title = 'Click for a circle of radius 500m';
+        radButton1.style.textAlign = 'right';
+		radButton1.style.paddingTop = '2px';
+		radButton1.style.paddingBottom = '3px';
+		radButton1.style.paddingLeft = '13px';
+		radButton1.style.paddingRight = '5px';
+		radButton1.style.fontFamily = 'Roboto,Arial,sans-serif';
+		radButton1.style.lineHeight = '30px';
+		radButton1.style.fontSize = '14px';
+		radButton1.innerHTML = 'Circle Radius: 500m';
+		
+		radButton2.style.backgroundColor = '#fff';
+        radButton2.style.border = '2px solid #fff';
+        radButton2.style.borderRadius = '3px';
+        radButton2.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        radButton2.style.cursor = 'pointer';
+        radButton2.style.marginBottom = '2px';
+		radButton2.title = 'Click for a circle of radius 1000m';
+        radButton2.style.textAlign = 'right';
+		radButton2.style.paddingTop = '2px';
+		radButton2.style.paddingBottom = '3px';
+		radButton2.style.paddingLeft = '13px';
+		radButton2.style.paddingRight = '5px';
+		radButton2.style.fontFamily = 'Roboto,Arial,sans-serif';
+		radButton2.style.lineHeight = '30px';
+		radButton2.style.fontSize = '14px';
+		radButton2.innerHTML = 'Circle Radius: 1000m';
+		
+		radButton3.style.backgroundColor = '#fff';
+        radButton3.style.border = '2px solid #fff';
+        radButton3.style.borderRadius = '3px';
+        radButton3.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        radButton3.style.cursor = 'pointer';
+        radButton3.style.marginBottom = '2px';
+		radButton3.title = 'Click for a circle of radius 2000m';
+        radButton3.style.textAlign = 'right';
+		radButton3.style.paddingTop = '2px';
+		radButton3.style.paddingBottom = '3px';
+		radButton3.style.paddingLeft = '13px';
+		radButton3.style.paddingRight = '5px';		
+		radButton3.style.fontFamily = 'Roboto,Arial,sans-serif';
+		radButton3.style.lineHeight = '30px';
+		radButton3.style.fontSize = '14px';
+		radButton3.innerHTML = 'Circle Radius: 2000m';
+	
+		radButton1.addEventListener('click', function() {
+			if (circleVisible500 == 1){
+				centreCircle.setMap(null);
+				circleVisible500 = 0
+				radButton1.style.backgroundColor = '#fff';
+				radButton1.style.border = '2px solid #fff'; //if the circle is currently on, turn it off, highlight the button again, and set the circleVisible500 variable to 0 to show it's off
+				}
+			else{                                           //if the circle is off remove the one that is there (if there is one) and then create a new one of the right size, centre the map, apply the right zoom, grey out the button, reset the circle variables 
+				centreCircle.setMap(null);
+				circleColor = randomColor = googleColors[Math.floor(Math.random() * googleColors.length)];
+				centreCircle = new google.maps.Circle({
+				strokeColor: circleColor,
+				strokeOpacity: 0.8,
+				strokeWeight: 2,
+				fillColor: '#FF0000',
+				fillOpacity: 0.0,
+				map: map,
+				center: pos,
+				radius: 500
+				});
+				centreCircle.setMap(map)
+
+				radButton1.style.backgroundColor = '#e3e3e3';
+				radButton1.style.border = '2px solid #e3e3e3';
+				radButton2.style.backgroundColor = '#fff';
+				radButton2.style.border = '2px solid #fff';
+				radButton3.style.backgroundColor = '#fff';	
+				radButton3.style.border = '2px solid #fff';		
+
+				map.setCenter(pos);
+				map.setZoom(15);
+				circleVisible500 = 1;
+				circleVisible1000 = 0;
+				circleVisible2000 = 0;
+				}
+		});		
+
+		radButton2.addEventListener('click', function() {
+			if (circleVisible1000 == 1){
+				centreCircle.setMap(null);
+				circleVisible1000 = 0
+				radButton2.style.backgroundColor = '#fff';
+				radButton2.style.border = '2px solid #fff';
+				}
+			else{
+				centreCircle.setMap(null)
+				circleColor = randomColor = googleColors[Math.floor(Math.random() * googleColors.length)];
+				centreCircle = new google.maps.Circle({
+				strokeColor: circleColor,
+				strokeOpacity: 0.8,
+				strokeWeight: 2,
+				fillColor: '#FF0000',
+				fillOpacity: 0.0,
+				map: map,
+				center: pos,
+				radius: 1000
+				});
+				centreCircle.setMap(map)
+				radButton1.style.backgroundColor = '#fff';
+				radButton1.style.border = '2px solid #fff';
+				radButton2.style.backgroundColor = '#e3e3e3';
+				radButton2.style.border = '2px solid #e3e3e3';
+				radButton3.style.backgroundColor = '#fff';
+				radButton3.style.border = '2px solid #fff';
+				
+				map.setCenter(pos);
+				map.setZoom(14)
+				circleVisible500 = 0;
+				circleVisible1000 = 1;
+				circleVisible2000 = 0;
+				}
+		});
+		
+		radButton3.addEventListener('click', function() {
+			if (circleVisible2000 == 1){
+				centreCircle.setMap(null);
+				circleVisible2000 = 0
+				radButton3.style.backgroundColor = '#fff';
+				radButton3.style.border = '2px solid #fff';
+				}
+			else{
+				centreCircle.setMap(null);
+				circleColor = randomColor = googleColors[Math.floor(Math.random() * googleColors.length)];
+				centreCircle = new google.maps.Circle({
+				strokeColor: circleColor,
+				strokeOpacity: 0.8,
+				strokeWeight: 2,
+				fillColor: '#FF0000',
+				fillOpacity: 0.0,
+				map: map,
+				center: pos,
+				radius: 2000
+				});
+				centreCircle.setMap(map)
+
+				radButton3.style.backgroundColor = '#e3e3e3';
+				radButton3.style.border = '2px solid #e3e3e3';
+				radButton2.style.backgroundColor = '#fff';
+				radButton2.style.border = '2px solid #fff';
+				radButton1.style.backgroundColor = '#fff';	
+				radButton1.style.border = '2px solid #fff';		
+
+				map.setCenter(pos);
+				map.setZoom(13);
+				circleVisible2000 = 1;
+				circleVisible500 = 0;
+				circleVisible1000 = 0;
+				}
+		});		
+	  }
+
+        function TrafficOnControl(controlDiv, map) {
+			
+    	// Set CSS for the control border.
+        var trafficButton = document.createElement('div');
+        trafficButton.style.backgroundColor = '#fff';
+        trafficButton.style.border = '2px solid #fff';
+        trafficButton.style.borderRadius = '3px';
+        trafficButton.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        trafficButton.style.cursor = 'pointer';
+        trafficButton.style.marginBottom = '10px';
+        trafficButton.style.textAlign = 'right';
+        trafficButton.title = 'Click to toggle traffic layer on/off';
+        trafficButton.style.fontFamily = 'Roboto,Arial,sans-serif';
+		trafficButton.style.lineHeight = '30px';
+        trafficButton.style.fontSize = '14px';
+        trafficButton.style.paddingLeft = '80px';
+        trafficButton.style.paddingRight = '5px';
+        trafficButton.innerHTML = 'Traffic: Off';  //initially set here but this changes with the button click in the if statement below
+        controlDiv.appendChild(trafficButton);
+		
+// The event that happens on button click
+        trafficButton.addEventListener('click', function() {
+			if (traffic == 0){
+				trafficLayer.setMap(map);
+				traffic = 1
+				trafficButton.innerHTML = 'Traffic: On';  }
+			else{
+				trafficLayer.setMap(null);
+				traffic = 0
+				trafficButton.innerHTML = 'Traffic: Off';  }
+				});
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//the map window and its contents (javascript + html tag creation/call)
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+ //         center: {lat: 37.422, lng: -122.084},		//Could have this line uncommented to load the map in a specific place before it zooms to the user location
+          zoom: 15
+        });
+        infoWindow = new google.maps.InfoWindow;
+//make sure the traffic layer is in a *global* variable
+		trafficLayer = new google.maps.TrafficLayer()
+//set the traffic variable initially to off position
+		traffic = 0
+		circleVisible500 = 1 //the 500m radius circle is initially added to the map upon initialisation so set to 1
+		circleVisible1000 = 0  //the other circle radiuses are set to 0
+		circleVisible2000 = 0  //the other circle radiuses are set to 0
+
+// get geolocation
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };			
+            map.setCenter(pos);
+
+//Start of Circle
+			googleColors = ['#0F9D58', '#F4B400', '#DB4437', '#4285F4']  // The googleColors array is used when the circles are created each time so this is a global variable
+			randomColor = googleColors[Math.floor(Math.random() * googleColors.length)]; //this gets a random colour of the four colours within googeColors array.
+			centreCircle = new google.maps.Circle({
+			  strokeColor: randomColor,
+			  strokeOpacity: 0.8,
+			  strokeWeight: 2,
+			  fillColor: '#FF0000',
+			  fillOpacity: 0.0,
+			  map: map,
+			  center: pos,
+			  radius: 500
+			});
+//End of Circle
+          },
+
+		function() {
+        handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+
+//apply the traffic button to the map	
+		var trafficOnControlDiv = document.createElement('div');
+		var trafficOnControl = new TrafficOnControl(trafficOnControlDiv, map);
+
+		trafficOnControlDiv.index = 1;
+		map.controls[google.maps.ControlPosition.LEFT_CENTER].push(trafficOnControlDiv);
+
+//apply the circle buttons to the map	
+		var circleControlDiv = document.createElement('div');
+		var circleControl = new CircleControl(circleControlDiv, map);
+
+		circleControlDiv.index = 2;
+		map.controls[google.maps.ControlPosition.LEFT_CENTER].push(circleControlDiv);
+	  }	  
+		  
+//geolocatoin error handling	  
+	function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+		infoWindow.setPosition(pos);
+		infoWindow.setContent(browserHasGeolocation ?
+						  'Error: The Geolocation service failed.' :
+						  'Error: Your browser doesn\'t support geolocation.');
+		infoWindow.open(map);
+  }
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDayLrIvcJ4ZNqI_8E2FzKmPDCa4pu67wU&callback=initMap">
+    </script>
+  </body>
+</html>
